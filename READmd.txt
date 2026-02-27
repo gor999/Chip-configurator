@@ -1,0 +1,3 @@
+For build this project you will download QT libraries:
+afther that you must moved to core_apb_3_configurator, open terminal and write make,
+all parts of program automaticly started building
