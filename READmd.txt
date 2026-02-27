@@ -1,5 +1,21 @@
-For build this project you will download QT libraries:
-afther that you must moved to core_apb_3_configurator, open terminal and write make,
-all parts of program automaticly started building
+Project Description
 
-This project i have done on 30.12.2022
+This project was developed on December 30, 2022.
+
+Build Instructions
+
+To build and run this project, please follow these steps:
+
+Install the Qt libraries (make sure Qt is properly configured and added to your system path).
+
+Navigate to the project directory:
+
+core_apb_3_configurator
+
+Open a terminal in this directory.
+
+Run the following command:
+
+make
+
+The build process will start automatically, and all components of the program will be compiled.
