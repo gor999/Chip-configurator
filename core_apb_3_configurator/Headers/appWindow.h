@@ -26,6 +26,7 @@ private:
 
 private slots:
 	void openCoreApb3Config();
+	void closeCoreApb3Config();
 //	void tempCloseUseForJson();
 };
 

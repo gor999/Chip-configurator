@@ -312,23 +312,30 @@ void MainWindow::tempCloseForJson()
 	
 	QJsonObject jsObj;
 	getCheckedRadioButton();
-	m_arr.append(m_checkBoxNameJson);
 	
 	
 		
 	jsObj.insert("Tiltle", CORE_APB_3);
 	jsObj.insert("Subbtitle",SUB_TXT_ACTEL );	
 	
-	QString drivenConfig     = m_drivenConfigs->currentText();
 	QString posConfig        = m_positionConfigs->currentText();
+	QString drivenConfig     = m_drivenConfigs->currentText();
 	QString indConfigs 	 = m_indirectConfigs->currentText(); 
 	
 	QJsonObject objCheckBoxes;
+	
+	
+	
+	
 	objCheckBoxes.insert(INDIRECTADDR,   indConfigs);
+	
 	objCheckBoxes.insert(NUMBERSADDRBTS, drivenConfig);
 	objCheckBoxes.insert(POSITION_SLAVE, posConfig);
-	m_arr.append(objCheckBoxes);	
+	
+
 	m_arr.append(jsObj);
+	m_arr.append(objCheckBoxes);	
+	m_arr.append(m_checkBoxNameJson);
 
 
 
@@ -403,7 +410,6 @@ QWidget* MainWindow::createFooterWidget()
 	
 	return widgetForFooterButtons;
 }
-
 
 void MainWindow::loadSource()
 {
@@ -510,8 +516,6 @@ QStringList MainWindow::getAllJsonValues(const QString &filePath)
     }
 
     QJsonArray rootArray = doc.array();
-
-    // Loop through all objects in array
     for (const QJsonValue &value : rootArray)
     {
         if (!value.isObject())
@@ -523,8 +527,6 @@ QStringList MainWindow::getAllJsonValues(const QString &filePath)
         {
             QString val = obj.value(key).toString();
 
-            // Store as "key : value"
-            //result.append(key + " -> " + val);
             result.append(val);
 	}
     }

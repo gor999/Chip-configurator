@@ -8,6 +8,13 @@
 #include<QAction>
 #include<QToolBar>
 #include<iostream>
+#include <QFile>
+#include <QDir>
+
+
+
+
+
 
 const QString BG_WIDGET_COLOR = "QWidget { background-color:white}";
 const unsigned int MIN_WIDTH  = 500;
@@ -99,8 +106,13 @@ QWidget* AppMainWindow::createButtons(){
     widgForBtnLyt->addWidget(textLabel, 4, 0);
     widgForBtn->setLayout(widgForBtnLyt);
 	connect(coreApb3Config,  &QPushButton::clicked, this, &AppMainWindow::openCoreApb3Config);
+
+    
+    connect(closeApp, &QPushButton::clicked, this, &AppMainWindow::closeCoreApb3Config);
+	
     connect(closeApp, &QPushButton::clicked, this, &AppMainWindow::close);
 	return widgForBtn;
+	
 }
 void AppMainWindow::openCoreApb3Config()
 {
@@ -120,7 +132,20 @@ void AppMainWindow::openCoreApb3Config()
 //std::cout<<"Okay its work"<<std::endl;
 }
 
-
+void AppMainWindow::closeCoreApb3Config()
+{
+	QString filePath = QDir().absolutePath() +"/save.json" ;
+	QFile file(filePath);
+	if (file.exists()) {
+ 	
+		QFile::remove(filePath);
+	        qDebug() << "File deleted";
+	} 
+	else {
+	        qDebug() << "Failed to delete:" << file.errorString();
+	    }
+	
+}
 
 
 AppMainWindow::~AppMainWindow()
