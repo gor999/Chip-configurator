@@ -9,13 +9,10 @@
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <iostream>
 #include <QGroupBox> 
 #include <QTextStream>
 #include <QFile>
 #include <QJsonDocument>
-#include <QDesktopServices>
-#include <QUrl>
 
 
 
@@ -35,19 +32,11 @@ MainWindow::MainWindow(QWidget *parent)
 	pMainLayout->addWidget( createTabWidget() );
 	pMainLayout->addWidget( createFooterWidget() );		
 	setLayout(pMainLayout);
-	
 	QStringList allData = getAllJsonValues("save.json");
-
-	for (const QString &line : allData)
-	{
-	    qDebug() << line;
-	}	
-
 	setStates();
 }
 
-MainWindow::~MainWindow()
-{}
+MainWindow::~MainWindow(){}
 
 QWidget* MainWindow::createHeaderWidget()
 {
@@ -59,106 +48,83 @@ QWidget* MainWindow::createHeaderWidget()
 	containerHeader->setMinimumHeight(70);
    	containerForMainerText->setFont(QFont(FONT_FAMILY, 16, 100));
 	containerForFouterText->setFont(QFont(FONT_FAMILY, 9, 200));	
-    vbox->addWidget(containerForMainerText);
-    vbox->addWidget(containerForFouterText);
-    containerHeader->setLayout(vbox);
+    	vbox->addWidget(containerForMainerText);
+    	vbox->addWidget(containerForFouterText);
+    	containerHeader->setLayout(vbox);
 	return containerHeader;
 };
 
 QTabWidget* MainWindow::createTabWidget()
 {
-		QTabWidget* mainTabWidget = new QTabWidget();
-		QWidget* tabItem          = new QWidget();
-		QVBoxLayout *tabItem1Lyt  = new QVBoxLayout();
-		
-		mainTabWidget->setMinimumHeight(700);
-		mainTabWidget->addTab(tabItem,"Configuration");
-		tabItem->setLayout(tabItem1Lyt);
-		tabItem->setMinimumHeight(600);
-		loadSource(); 
-		tabItem1Lyt->addWidget( createDataConfigGb() );	
-		tabItem1Lyt->addWidget( createAddressConfigGb() );	
-		tabItem1Lyt->addWidget( createCheckesGb(ENABLED_APB_SLAVE_SLOTS) );
-		tabItem1Lyt->addWidget( createCheckesGb(ALLOCATE_MEMORY_SPACE_TO_COMBINED_REGION_SLAVE) );
-		tabItem1Lyt->addWidget( createTestbenchConfig() );	
-		return mainTabWidget;
+	QTabWidget* mainTabWidget = new QTabWidget();
+	QWidget* tabItem          = new QWidget();
+	QVBoxLayout *tabItem1Lyt  = new QVBoxLayout();
+	mainTabWidget->setMinimumHeight(700);
+	mainTabWidget->addTab(tabItem,"Configuration");
+	tabItem->setLayout(tabItem1Lyt);
+	tabItem->setMinimumHeight(600);
+	loadSource(); 
+	tabItem1Lyt->addWidget( createDataConfigGb() );	
+	tabItem1Lyt->addWidget( createAddressConfigGb() );	
+	tabItem1Lyt->addWidget( createCheckesGb(ENABLED_APB_SLAVE_SLOTS) );
+	tabItem1Lyt->addWidget( createCheckesGb(ALLOCATE_MEMORY_SPACE_TO_COMBINED_REGION_SLAVE) );
+	tabItem1Lyt->addWidget( createTestbenchConfig() );	
+	return mainTabWidget;
 }
 
 
 QGroupBox* MainWindow::createDataConfigGb()
 {
 	 QGroupBox* groupBox 						  = new QGroupBox("Data Width Configuration"); 
-	 groupBox->setFont(m_headersFont);
-	 
-	 QGridLayout* ContainerForRadioButtonAndTexts = new QGridLayout();  // change to QHLayout
-	  
-	 QLabel* containerForGroupBoxText 			  = new QLabel("APB Master Bus Width");
-	 QSpacerItem *SpacerForRadioButtons 		  = new QSpacerItem(0,60, QSizePolicy::Expanding, QSizePolicy::Expanding);
-		
-	 	 
-
+	 QGridLayout* ContainerForRadioButtonAndTexts 			  = new QGridLayout();
+	 QLabel* containerForGroupBoxText 			  	  = new QLabel("APB Master Bus Width");
+	 QSpacerItem *SpacerForRadioButtons 		  		  = new QSpacerItem(0,60, QSizePolicy::Expanding, QSizePolicy::Expanding);
 	 QRadioButton *button32 					  = new QRadioButton("32-bit");
 	 QRadioButton *button16 					  = new QRadioButton("16-bit");
 	 QRadioButton *button8  					  = new QRadioButton("8-bit");
-	
-	m_busWidthData.push_back(button32);	
-	m_busWidthData.push_back(button16);
-	m_busWidthData.push_back(button8);
-
-
-
+	 groupBox->setFont(m_headersFont);
+	 m_busWidthData.push_back(button32);	
+	 m_busWidthData.push_back(button16);
+	 m_busWidthData.push_back(button8);
 	 button32->setFont(m_contentFont);
 	 button16->setFont(m_contentFont);
 	 button8->setFont(m_contentFont);
-
 	 QSizePolicy grBoxSzPolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 	 groupBox->setStyleSheet(GROUP_BOX_STYLE_SHEET);                    
 	 groupBox->setSizePolicy(grBoxSzPolicy); 		
 	 groupBox->setFixedHeight(50);
 	 groupBox->setMinimumHeight(50);
 	 containerForGroupBoxText->setFont(m_contentFont);		
-     	 
-	 //button32->setChecked(true);
-   	 
-	ContainerForRadioButtonAndTexts->addWidget(containerForGroupBoxText, 0, 0);
+	 ContainerForRadioButtonAndTexts->addWidget(containerForGroupBoxText, 0, 0);
    	 ContainerForRadioButtonAndTexts->addWidget(button32, 0, 1);
    	 ContainerForRadioButtonAndTexts->addWidget(button16, 0, 2);
    	 ContainerForRadioButtonAndTexts->addWidget(button8,  0, 3);
 	 ContainerForRadioButtonAndTexts->addItem(SpacerForRadioButtons, 4, 4);
-     groupBox->setLayout(ContainerForRadioButtonAndTexts);
+     	 groupBox->setLayout(ContainerForRadioButtonAndTexts);
 	 return groupBox;
 }
 
 
 QGroupBox* MainWindow::createAddressConfigGb()
 {
-//change to GridLayout	
-
 	QGroupBox *boxForAdress     	       = new QGroupBox("Address Configuration");
 	QGridLayout*  boxForAdressLyt          = new QGridLayout();
-	
-	
-	
 	m_drivenConfigs               		= new QComboBox();
 	m_positionConfigs            	 	= new QComboBox();
 	m_indirectConfigs 	      		= new QComboBox(); 
 	QLabel* drivenTextLable	                = new QLabel(NUMBERSADDRBTS);	
 	QLabel* positionTextContent             = new QLabel(POSITION_SLAVE);
 	QLabel* indirectTextLable  	        = new QLabel(INDIRECTADDR);
-//////////////
-	
 	m_drivenConfigs->addItems(QStringList({"32","28", "24", "20", "12"}));
 	boxForAdressLyt->addWidget(drivenTextLable, 0, 0);
    	boxForAdressLyt->addWidget(m_drivenConfigs, 0, 1);
 	m_drivenConfigs->setFont(m_contentFont);
     	drivenTextLable->setFont(m_contentFont);
-
 	m_positionConfigs->addItems(positionConfigStatus);
 	boxForAdressLyt->addWidget(positionTextContent, 1, 0);
     	boxForAdressLyt->addWidget(m_positionConfigs, 1, 1);
 	m_positionConfigs->setFont(m_contentFont);
 	positionTextContent->setFont(m_contentFont);
-	
 	m_indirectConfigs->addItems(indirectConfigStatus);
 	boxForAdressLyt->addWidget(indirectTextLable, 2, 0);
     	boxForAdressLyt->addWidget(m_indirectConfigs, 2, 1);
@@ -169,7 +135,6 @@ QGroupBox* MainWindow::createAddressConfigGb()
 	boxForAdress->setFixedHeight(130);
 	boxForAdress->setMinimumHeight(130);		
 	return boxForAdress;
-
 }
 
 
@@ -180,23 +145,16 @@ QGroupBox* MainWindow::createAddressConfigGb()
 QGroupBox* MainWindow::createCheckesGb(const QString& strType)
 {
 	if (!( (strType == ENABLED_APB_SLAVE_SLOTS) || (strType == ALLOCATE_MEMORY_SPACE_TO_COMBINED_REGION_SLAVE) ) ) return NULL;
-
-//impliment third construction	
-    QGroupBox *BoxForAllocateMemory = new QGroupBox(strType);   
+    	QGroupBox *BoxForAllocateMemory = new QGroupBox(strType);   
 	BoxForAllocateMemory->setStyleSheet(GROUP_BOX_STYLE_SHEET);
-										 
 	QGridLayout *ContainerforCheckboxes = new QGridLayout;
 	ContainerforCheckboxes->setContentsMargins(10, 20, 10, 15);
-	
 	QSpacerItem *horizontalSpacerAlocateMem = new QSpacerItem(0,20, QSizePolicy::Expanding, QSizePolicy::Expanding);
 	ContainerforCheckboxes->addItem(horizontalSpacerAlocateMem, 4, 4);
-	
 	BoxForAllocateMemory->setFont(m_headersFont);
-
 	BoxForAllocateMemory->setLayout(ContainerforCheckboxes);
 	BoxForAllocateMemory->setFixedHeight(150);
 	BoxForAllocateMemory->setMinimumHeight(150);		
-	
 	int txl = 0;
 	for(size_t i = 0; i < m_vecChbSrc.size() / 4; ++i){
 		for(size_t j = 0; j < m_vecChbSrc.size() / 4; ++j){
@@ -222,23 +180,16 @@ QWidget* MainWindow::createTestbenchConfig() //funcPartOfTest()
 	QRadioButton *buttonofObfuscated       = new QRadioButton("Obfuscated");
 	QRadioButton *buttonofRtl 		 	   = new QRadioButton("RTL");
 	buttonofRtl->setChecked(true);
-			
 	QLabel* textLableForTestBench 	 	   = new QLabel("Testbench:");
 	QLabel* textLableForLicense 	 	   = new QLabel("License:  ");
 	buttonofObfuscated->setFont(m_contentFont);
-    buttonofRtl->setFont(m_contentFont); 
+    	buttonofRtl->setFont(m_contentFont); 
 	textLableForTestBench->setFont(m_contentFont); 	 	
-    textLableForLicense->setFont(m_contentFont); 
-	
-	
+    	textLableForLicense->setFont(m_contentFont); 
 	QSpacerItem *SpacerForTestBrenchConfig = new QSpacerItem(0,60, QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-		
-	
 	testBenchConfigs->addItems(QStringList({"User", "None"}));
 	testBenchConfigs->setFont(m_contentFont);
 	testBenchConfigs->setMaximumSize(70, 30);
-	
 	partOfTestsLyt->addWidget(textLableForTestBench, 0,0);		
 	partOfTestsLyt->addWidget(testBenchConfigs, 0, 1);	
 	partOfTestsLyt->addWidget(textLableForLicense, 1, 0);
@@ -251,33 +202,20 @@ QWidget* MainWindow::createTestbenchConfig() //funcPartOfTest()
 
 void MainWindow::tempCloseForJson()
 {
-	
 	QJsonObject jsObj;
-	
-
 	getCheckedRadioButton();
 	getJsonState();
-		
 	jsObj.insert("Tiltle", CORE_APB_3);
 	jsObj.insert("Subbtitle",SUB_TXT_ACTEL );	
-	
 	QString posConfig        = m_positionConfigs->currentText();
 	QString drivenConfig     = m_drivenConfigs->currentText();
 	QString indConfigs 	 = m_indirectConfigs->currentText(); 
-	
-	
 	jsObj.insert(INDIRECTADDR,   indConfigs);
 	jsObj.insert(NUMBERSADDRBTS, drivenConfig);
 	jsObj.insert(POSITION_SLAVE, posConfig);
-	
-
 	m_arr.append(jsObj);
 	m_arr.append(m_checkBoxNameJson);
-
-
-
 	QFile File("save.json");
-	
 	QString strFromObj = QJsonDocument(m_arr).toJson(QJsonDocument::Indented);
 	if(File.open(QIODevice::Truncate | QIODevice::ReadWrite)){
 		QTextStream stream(&File);
@@ -285,65 +223,27 @@ void MainWindow::tempCloseForJson()
 		stream<<strFromObj;
 	}
 	File.close();	
-	
-
-
 }
-
-
-
 
 QWidget* MainWindow::createFooterWidget()
 {
  	QWidget* widgetForFooterButtons 	   = new QWidget();
 	QGridLayout* containerForFooterButtons 	   = new QGridLayout();
-	
-
-	
 	QSpacerItem *SpacerForFooterButtons        = new QSpacerItem(20,60, QSizePolicy::Expanding, QSizePolicy::Expanding);
-	QDialogButtonBox* bb 		           = new QDialogButtonBox(
-			QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help );
-
+	QDialogButtonBox* bb 		           = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help );
 	QSizePolicy grBoxSzPolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	widgetForFooterButtons->setSizePolicy(grBoxSzPolicy); 		
-	
 	QPushButton* okBtn = bb->button(QDialogButtonBox::Ok);
 	okBtn->setAutoDefault(true);
 	okBtn->setDefault(true);	
 	okBtn->setFont(m_contentFont);
 	connect(bb, &QDialogButtonBox::clicked, this, &MainWindow::tempCloseForJson);
-	
-	
-	
 	connect(bb, &QDialogButtonBox::clicked, this, &QDialog::reject);	
 	QPushButton* caBtn = bb->button(QDialogButtonBox::Cancel);	
 	caBtn->setFont(m_contentFont);
 	caBtn->setAutoDefault(false);
 	caBtn->setDefault(false);
-	
-	
 	QPushButton* helpBtn = bb->button(QDialogButtonBox::Help); 
-
-connect(helpBtn, &QPushButton::clicked, this, [=]()
-{
-    QUrl url("https://www.google.com");
-
-    if (!QDesktopServices::openUrl(url))
-    {
-        qDebug() << "Failed to open URL";
-    }
-});
-
-
-
-
-
-
-
-
-
-
-	
 	helpBtn->setFont(m_contentFont);
 	okBtn->setMaximumSize(70, 30);
 	caBtn->setMaximumSize(70, 30);
@@ -375,6 +275,7 @@ void MainWindow::loadSource()
 		} 
 	}
 }
+
 void MainWindow::changeCheckBoxState()
 {
 	QString tmp;
@@ -416,53 +317,42 @@ void MainWindow::getCheckedRadioButton()
 
 QStringList MainWindow::getAllJsonValues(const QString &filePath)
 {
-QStringList result;
+	QStringList result;
+	QFile file(filePath);
+	if (!file.open(QIODevice::ReadOnly)) {
+	    return result;
+	}
+	QByteArray data = file.readAll();
+	file.close();
+	QJsonParseError error;
+	QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+	if (error.error != QJsonParseError::NoError) {
+	    return result;
+	}
+	if (!doc.isArray()) {
+	    return result;
+	}
+	QJsonArray rootArray = doc.array();
+	for (const QJsonValue &value : rootArray)
+	{
+	    if (value.isObject())
+	    {
+	        QJsonObject obj = value.toObject();
+	        for (auto it = obj.begin(); it != obj.end(); ++it)
+	        {
+	            QString key = it.key();
+	            QString val = it.value().toString();
+	            m_states.push_back(std::make_pair(key, val));
+	            result.append(val);
+	        }
+	    }
+	}
 
-QFile file(filePath);
-if (!file.open(QIODevice::ReadOnly)) {
-    return result;
+	return result;
 }
 
-QByteArray data = file.readAll();
-file.close();
-
-QJsonParseError error;
-QJsonDocument doc = QJsonDocument::fromJson(data, &error);
-
-if (error.error != QJsonParseError::NoError) {
-    return result;
-}
-
-if (!doc.isArray()) {
-    return result;
-}
-
-QJsonArray rootArray = doc.array();
-
-for (const QJsonValue &value : rootArray)
+void MainWindow::setStatesForCombobox(QComboBox* cmb)
 {
-    if (value.isObject())
-    {
-        QJsonObject obj = value.toObject();
-
-        for (auto it = obj.begin(); it != obj.end(); ++it)
-        {
-            QString key = it.key();
-            QString val = it.value().toString();
-
-            m_states.push_back(std::make_pair(key, val));
-            result.append(val);
-
-        }
-    }
-
-}
-
-return result;
-}
-
-void MainWindow::setStatesForCombobox(QComboBox* cmb){
-	
 	for(size_t i = 0; i < m_states.size(); i++)
 	{
 		for( int j = 0; j < cmb->count(); j++)
@@ -477,37 +367,28 @@ void MainWindow::setStatesForCombobox(QComboBox* cmb){
 	}
 }
 
-
-
-
-
 void MainWindow::setStates()
 {
-	
-for(size_t i = 0; i < m_states.size(); i++)
-{
-    for(size_t j = 0; j < m_busWidthData.size(); j++)
-    {
-        if(m_busWidthData[j]->text() == m_states[i].second)
-        {
-            m_busWidthData[j]->setChecked(true);
-        }
-    }
-
-    for(size_t j = 0; j < m_vecChbSrc.size(); ++j)
-    {
-        if (m_vecChbSrc[j].first->text() == m_states[i].second)
-        {
-            m_vecChbSrc[j].first->setChecked(true);
-        }
-    }
-}
-
+	for(size_t i = 0; i < m_states.size(); i++)
+	{
+	    for(size_t j = 0; j < m_busWidthData.size(); j++)
+	    {
+	        if(m_busWidthData[j]->text() == m_states[i].second)
+	        {
+	            m_busWidthData[j]->setChecked(true);
+	        }
+	    }
+	    for(size_t j = 0; j < m_vecChbSrc.size(); ++j)
+	    {
+	        if (m_vecChbSrc[j].first->text() == m_states[i].second)
+	        {
+	            m_vecChbSrc[j].first->setChecked(true);
+	        }
+	    }
+	}
 	setStatesForCombobox(m_drivenConfigs);
 	setStatesForCombobox(m_indirectConfigs);
 	setStatesForCombobox(m_positionConfigs);
-
-
 }
 
 

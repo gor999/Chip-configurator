@@ -13,9 +13,6 @@ class QGroupBox;
 class QComboBox;
 class QRadioButton;
 
-
-
-
 class MainWindow : public QDialog
 {
 	Q_OBJECT	
