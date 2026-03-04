@@ -1,0 +1,18 @@
+[
+    {
+        "Data with configuration": "16-bit"
+    },
+    {
+        "Indirect Addressing:": "Indirect address sourced from IADDR input port",
+        "Number of Address bits driven by master:": "24",
+        "Position in slave address of upper 4 bit of master address:": "[31:28]",
+        "Subbtitle": "Actel:DirectCore:CoreAPB3:4.2.100",
+        "Tiltle": "CoreAPB3 Configurator"
+    },
+    {
+        "loto0": "Slot 0",
+        "loto1": "Slot 1",
+        "loto15": "Slot 15",
+        "loto6": "Slot 6"
+    }
+]
